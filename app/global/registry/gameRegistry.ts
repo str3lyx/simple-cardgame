@@ -5,3 +5,5 @@ class GameRegistry {
 
   public static register(card: BaseCard) {}
 }
+
+export default GameRegistry
