@@ -1,4 +1,5 @@
 interface GameSetting {
+  minPlayer?: number,
   maxPlayer?: number
 }
 
