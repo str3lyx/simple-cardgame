@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Multiplayer Card Game</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="style.css" rel="stylesheet" />
+  </head>
+
+  <body>
+    <main>
+      <!-- Main  -->
+      <div id="main">
+        <div class="row">
+          <div class="col">
+            <div class="subtitle">Multiplayer Card Game</div>
+            <div class="message">
+              Room Status: <span id="room-status">0 player</span>
+            </div>
+            <div class="spread">
+              <button id="btn-join" onclick="join()">Join Game</button>
+              <button id="btn-signout" onclick="signOut()">Sign out</button>
+            </div>
+            <div class="message" id="join-message"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Waiting Room  -->
+      <div id="waiting-room" style="display: none">
+        <div class="center spread">
+          <button id="btn-ready" onclick="ready()">Ready</button>
+          <button id="btn-unready" onclick="unready()" style="display: none">
+            Cancel Ready
+          </button>
+          <button id="btn-quit" onclick="quit()">Quit</button>
+        </div>
+        <div class="sector">
+          <div id="self">
+            <div class="player">
+              <div class="hand" id="self-hand"></div>
+              <div class="name">
+                <span id="self-name">You</span>
+                <span class="message" id="self-status"></span>
+              </div>
+            </div>
+          </div>
+          <div id="player1">
+            <div class="player">
+              <div class="hand" id="player1-hand"></div>
+              <div class="name">
+                <span id="player1-name">A</span>
+                <span class="message" id="player1-status"></span>
+              </div>
+            </div>
+          </div>
+          <div id="player2">
+            <div class="player">
+              <div class="hand" id="player2-hand"></div>
+              <div class="name">
+                <span id="player2-name">B</span>
+                <span class="message" id="player2-status"></span>
+              </div>
+            </div>
+          </div>
+          <div id="player3">
+            <div class="player">
+              <div class="hand" id="player3-hand"></div>
+              <div class="name">
+                <span id="player3-name">C</span>
+                <span class="message" id="player3-status"></span>
+              </div>
+            </div>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>
+<script src="/socket.io/socket.io.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.slim.min.js"></script>
+<script src="script.js"></script>

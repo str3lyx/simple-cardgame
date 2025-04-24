@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Register | Multiplayer Card Game</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="style.css" rel="stylesheet" />
+  </head>
+
+  <body>
+    <main>
+      <div class="row">
+        <form id="register-form" class="col">
+          <div class="subtitle">Register</div>
+          <input
+            name="username"
+            type="text"
+            maxlength="10"
+            placeholder="Enter your username"
+          />
+          <input
+            name="name"
+            type="text"
+            maxlength="16"
+            placeholder="Enter your name"
+          />
+          <input
+            name="password"
+            type="password"
+            placeholder="Enter your password"
+          />
+          <input
+            name="password2"
+            type="password"
+            placeholder="Enter your password again"
+          />
+          <div class="spread">
+            <a href="/sign-in">Already has account?</a>
+            <input type="submit" value="Register" />
+          </div>
+          <div id="register-message" class="message"></div>
+        </form>
+      </div>
+    </main>
+  </body>
+</html>
+
+<script src="script.js"></script>

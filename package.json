@@ -1,0 +1,28 @@
+{
+  "name": "multiplayer-card-game",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node game_server.js",
+    "dev": "nodemon game_server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@types/argon2": "^0.14.1",
+    "argon2": "^0.41.1",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "express-session": "^1.18.1",
+    "socket.io": "^4.8.1"
+  },
+  "devDependencies": {
+    "@types/ejs": "^3.1.5",
+    "@types/express": "^5.0.1",
+    "@types/express-session": "^1.18.1",
+    "@types/node": "^22.14.1",
+    "@types/socket.io": "^3.0.1",
+    "nodemon": "^3.1.9"
+  }
+}

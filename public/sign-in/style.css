@@ -1,0 +1,89 @@
+* {
+  font-family: 'Helvetica', sans-serif;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+button {
+  font-size: 20px;
+  font-weight: bold;
+  padding: 20px;
+}
+
+form {
+  align-items: stretch !important;
+}
+
+form input,
+form select {
+  font-size: 1rem;
+  padding: 10px 15px;
+}
+
+form button {
+  font-size: 1rem;
+  font-weight: normal;
+  padding: 10px 15px;
+}
+
+/*
+ * Other settings
+ */
+
+.row,
+.col {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 20px;
+}
+
+.spread {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.col {
+  flex-direction: column;
+}
+
+.title {
+  font-size: 60px;
+  font-weight: bold;
+  text-align: center;
+  padding: 40px 0;
+}
+
+.subtitle {
+  font-size: 40px;
+  font-weight: bold;
+  text-align: center;
+  padding: 30px 0;
+}
+
+.message {
+  text-align: center;
+  font-style: italic;
+}
+
+main {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  min-width: 100%;
+  min-height: 100vh;
+  padding: 0;
+  flex-direction: column;
+}
+
+#signin-form {
+  width: 50%;
+  min-width: 400px;
+}
