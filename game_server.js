@@ -4,7 +4,7 @@ const { createServer } = require('http')
 const { Server } = require('socket.io')
 const auth = require('./controllers/auth')
 const deck = require('./utils/deck')
-const { createPokerHand, compareTo } = require('poker-hand-utils')
+const { createPokerHand, getEvaluatedScore } = require('poker-hand-utils')
 
 const gameSession = session({
   secret: 'mp_cardgame',
@@ -235,15 +235,19 @@ const revealPlayersData = () => {
     const others = data.filter(([id]) => id !== sid)
     socket.emit('final', {
       self: player,
-      winner: null,
+      winner: findWinner(),
       players: others.map(([id, { socket, ...p }]) => p),
     })
   })
 }
 
 const findWinner = () => {
-  const playersData = Object.values(players)
-  const hands = playersData.map(({ cards }) => {
-    return createPokerHand(cards.join(' '))
-  })
+  const playersData = Object.values(players).map((player) => ({
+    ...player,
+    score: getEvaluatedScore(createPokerHand(player.cards.join(' '))),
+  }))
+  playersData.sort((a, b) => a.score - b.score)
+  console.log(playersData)
+  const winner = playersData.at(-1)
+  return winner ? { username: winner.username, name: winner.name } : null
 }

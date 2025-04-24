@@ -105,6 +105,8 @@ socket.on('final', (data) => {
       $(hands[i]).append(renderCard(card))
     })
   })
+  $('#stop').text('No winner.')
+  if (data.winner?.name) $('#stop').text(`The winner is ${data.winner?.name}`)
   $('#btn-ready').hide()
   $('#btn-unready').hide()
   $('#btn-quit').hide()
