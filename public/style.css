@@ -150,3 +150,28 @@ main {
   align-items: end;
   justify-content: end;
 }
+
+.hand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.card {
+  width: 6rem;
+  height: 8rem;
+  font-size: 6rem;
+  border: lightgray solid 1px;
+  border-radius: 10px;
+  box-shadow: 5px 5px 5px gray;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+#self .card {
+  cursor: pointer;
+}

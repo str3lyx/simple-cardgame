@@ -27,6 +27,11 @@ socket.on('join_status', ({ err, msg }) => {
     $('#join-message').text('')
     $('#main').hide()
     $('#waiting-room').show()
+    $('#btn-ready').show()
+    $('#btn-unready').hide()
+    $('#btn-quit').show()
+    $('#btn-replace').hide()
+    $('#btn-confirm').hide()
   }
 })
 
@@ -52,10 +57,27 @@ socket.on('players', (players) => {
 
 socket.on('start', (cards) => {
   console.log(cards)
-  $('#self-hand').text(cards.map((card) => renderCard(card)))
-  $('#player1-hand').text('🂠🂠🂠🂠🂠')
-  $('#player2-hand').text('🂠🂠🂠🂠🂠')
-  $('#player3-hand').text('🂠🂠🂠🂠🂠')
+  $('#btn-ready').hide()
+  $('#btn-unready').hide()
+  $('#btn-quit').hide()
+  $('#btn-replace').show()
+  $('#btn-confirm').show()
+  // render
+  cards.forEach((card) => {
+    $('#self-hand').append(renderCard(card))
+  })
+  Array.from({ length: 5 }).forEach(() => {
+    $('#player1-hand').append(renderCard(''))
+    $('#player2-hand').append(renderCard(''))
+    $('#player3-hand').append(renderCard(''))
+  })
+})
+
+socket.on('final', () => {
+  socket.disconnect()
+  setTimeout(() => {
+    window.location.reload()
+  }, 5000)
 })
 
 // ------ //
@@ -125,7 +147,9 @@ const renderCard = (card) => {
     Qc: '🃝',
     Kc: '🃞',
   }
-  return CARDS[card] || '🂠'
+  const div = $('<div class="card"></div>')
+  div.text(CARDS[card] || '🂠')
+  return div
 }
 
 // ------ //
@@ -144,16 +168,32 @@ function quit() {
   socket.emit('quit')
   $('#main').show()
   $('#waiting-room').hide()
+  $('#btn-ready').hide()
+  $('#btn-unready').hide()
+  $('#btn-quit').hide()
+  $('#btn-replace').hide()
+  $('#btn-confirm').hide()
 }
 
 function ready() {
   $('#btn-ready').hide()
   $('#btn-unready').show()
+  $('#btn-quit').show()
+  $('#btn-replace').hide()
+  $('#btn-confirm').hide()
   socket.emit('ready')
 }
 
 function unready() {
   $('#btn-ready').show()
   $('#btn-unready').hide()
+  $('#btn-quit').show()
+  $('#btn-replace').hide()
+  $('#btn-confirm').hide()
   socket.emit('unready')
+}
+
+function confirmMove() {
+  alert('aaa')
+  socket.emit('confirm')
 }

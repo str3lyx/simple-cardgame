@@ -38,15 +38,14 @@ io.engine.use(gameSession)
 io.use((socket, next) => {
   if (socket.request.session?.user) {
     socket.user = socket.request.session.user
-    console.log(socket.request.session)
     next()
   } else {
     next(new Error('unauthorized'))
   }
 })
 
-const isRunning = false
-const players = {}
+let isRunning = false
+let players = {}
 
 io.on('connection', (socket) => {
   sendStatus(socket)
@@ -101,6 +100,7 @@ io.on('connection', (socket) => {
       // all players readied
       if (checkAllPlayerStatus('ready')) {
         deck.init()
+        isRunning = true
         sendToPlayers('start', () => [...deck.draw(5)])
       }
     }
@@ -117,10 +117,14 @@ io.on('connection', (socket) => {
   socket.on('replace', (cards) => {})
 
   socket.on('confirm', () => {
-    players[socket.id].status = 'confirm'
-    sendPlayersData(socket)
-    if (checkAllPlayerStatus('confirm')) {
-      sendToPlayers('final', () => [...deck.draw(5)])
+    if (isRunning) {
+      console.log('Confirm >', socket.user)
+      players[socket.id].status = 'confirm'
+      sendPlayersData(socket)
+      if (checkAllPlayerStatus('confirm')) {
+        sendToPlayers('final')
+        setUp()
+      }
     }
   })
 
@@ -146,6 +150,11 @@ io.on('connection', (socket) => {
 httpServer.listen(8000)
 
 // ------ //
+
+const setUp = () => {
+  isRunning = false
+  players = {}
+}
 
 const checkAllPlayerStatus = (stat) => {
   const playersData = Object.values(players)

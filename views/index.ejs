@@ -34,6 +34,12 @@
             Cancel Ready
           </button>
           <button id="btn-quit" onclick="quit()">Quit</button>
+          <button id="btn-replace" onclick="" style="display: none">
+            Replace
+          </button>
+          <button id="btn-confirm" onclick="confirmMove()" style="display: none">
+            Confirm
+          </button>
         </div>
         <div class="sector">
           <div id="self">
@@ -49,7 +55,7 @@
             <div class="player">
               <div class="hand" id="player1-hand"></div>
               <div class="name">
-                <span id="player1-name">A</span>
+                <span id="player1-name"></span>
                 <span class="message" id="player1-status"></span>
               </div>
             </div>
@@ -58,7 +64,7 @@
             <div class="player">
               <div class="hand" id="player2-hand"></div>
               <div class="name">
-                <span id="player2-name">B</span>
+                <span id="player2-name"></span>
                 <span class="message" id="player2-status"></span>
               </div>
             </div>
@@ -67,7 +73,7 @@
             <div class="player">
               <div class="hand" id="player3-hand"></div>
               <div class="name">
-                <span id="player3-name">C</span>
+                <span id="player3-name"></span>
                 <span class="message" id="player3-status"></span>
               </div>
             </div>
