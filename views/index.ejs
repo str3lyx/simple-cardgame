@@ -27,6 +27,7 @@
       </div>
 
       <!-- Waiting Room  -->
+      <div id="stop" style="display: none;"></div>
       <div id="waiting-room" style="display: none">
         <div class="center spread">
           <button id="btn-ready" onclick="ready()">Ready</button>
@@ -34,7 +35,7 @@
             Cancel Ready
           </button>
           <button id="btn-quit" onclick="quit()">Quit</button>
-          <button id="btn-replace" onclick="" style="display: none">
+          <button id="btn-replace" onclick="replace()" style="display: none">
             Replace
           </button>
           <button id="btn-confirm" onclick="confirmMove()" style="display: none">

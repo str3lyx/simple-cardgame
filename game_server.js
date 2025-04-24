@@ -4,6 +4,7 @@ const { createServer } = require('http')
 const { Server } = require('socket.io')
 const auth = require('./controllers/auth')
 const deck = require('./utils/deck')
+const { createPokerHand, compareTo } = require('poker-hand-utils')
 
 const gameSession = session({
   secret: 'mp_cardgame',
@@ -84,6 +85,7 @@ io.on('connection', (socket) => {
       socket: socket,
       ...socket.user,
       status: 'waiting',
+      times: 2,
       cards: [],
     }
     socket.emit('join_status', { err: false })
@@ -101,7 +103,11 @@ io.on('connection', (socket) => {
       if (checkAllPlayerStatus('ready')) {
         deck.init()
         isRunning = true
-        sendToPlayers('start', () => [...deck.draw(5)])
+        for (let sid in players) {
+          const player = players[sid]
+          player.cards = [...deck.draw(5)]
+          player.socket.emit('start', player.cards)
+        }
       }
     }
   })
@@ -114,15 +120,44 @@ io.on('connection', (socket) => {
     }
   })
 
-  socket.on('replace', (cards) => {})
+  socket.on('replace', (cards) => {
+    const player = players[socket.id]
+    if (isRunning || player.status === 'ready') {
+      console.log(cards)
+      if (player.times <= 0) {
+        socket.emit('replaced', {
+          err: 'Your replace quota is exceeded.',
+          cards: player.cards,
+        })
+        return
+      }
+
+      cards = cards.filter((card) => player.cards.indexOf(card) >= 0)
+      if (cards.length > 0) {
+        player.cards = [
+          ...player.cards.filter((card) => cards.indexOf(card) == -1),
+          ...deck.replace(cards),
+        ]
+        player.times -= 1
+        socket.emit('replaced', { cards: player.cards })
+      } else {
+        socket.emit('replaced', {
+          err: 'You choose no card.',
+          cards: player.cards,
+        })
+        return
+      }
+    }
+  })
 
   socket.on('confirm', () => {
-    if (isRunning) {
+    const player = players[socket.id]
+    if (isRunning || player.status === 'ready') {
       console.log('Confirm >', socket.user)
       players[socket.id].status = 'confirm'
       sendPlayersData(socket)
       if (checkAllPlayerStatus('confirm')) {
-        sendToPlayers('final')
+        revealPlayersData()
         setUp()
       }
     }
@@ -132,6 +167,11 @@ io.on('connection', (socket) => {
     if (socket.id in players) {
       console.log('Quit >', socket.user)
       delete players[socket.id]
+      if (isRunning) {
+        Object.values(players).forEach(({ socket }) => socket.emit('out'))
+        setUp()
+        return
+      }
       sendStatus(io)
       sendPlayersData(socket)
     }
@@ -141,6 +181,11 @@ io.on('connection', (socket) => {
     if (socket.id in players) {
       console.log('Disconnect >', socket.user)
       delete players[socket.id]
+      if (isRunning) {
+        Object.values(players).forEach(({ socket }) => socket.emit('out'))
+        setUp()
+        return
+      }
       sendStatus(io)
       sendPlayersData(socket)
     }
@@ -173,12 +218,6 @@ const sendStatus = (...sockets) => {
   })
 }
 
-const sendToPlayers = (event, data = undefined) => {
-  Object.values(players).forEach(({ socket }) => {
-    socket.emit(event, typeof data === 'function' ? data() : data)
-  })
-}
-
 const sendPlayersData = () => {
   const data = Object.entries(players)
   data.forEach(([sid, { socket, ...player }]) => {
@@ -187,5 +226,24 @@ const sendPlayersData = () => {
       self: player,
       players: others.map(([id, { socket, cards, ...p }]) => p),
     })
+  })
+}
+
+const revealPlayersData = () => {
+  const data = Object.entries(players)
+  data.forEach(([sid, { socket, ...player }]) => {
+    const others = data.filter(([id]) => id !== sid)
+    socket.emit('final', {
+      self: player,
+      winner: null,
+      players: others.map(([id, { socket, ...p }]) => p),
+    })
+  })
+}
+
+const findWinner = () => {
+  const playersData = Object.values(players)
+  const hands = playersData.map(({ cards }) => {
+    return createPokerHand(cards.join(' '))
   })
 }

@@ -1,7 +1,7 @@
 let decks = []
 
-const SIGNS = ['s', 'h', 'd', 'c']
-const NUMS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
+const SIGNS = ['S', 'H', 'D', 'C']
+const NUMS = ['A', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K']
 
 export const init = () => {
   decks = shuffle(SIGNS.flatMap((sign) => NUMS.map((num) => `${num}${sign}`)))
@@ -17,6 +17,12 @@ export const shuffle = (arr) => {
     ;[shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]]
   }
   return shuffledArray
+}
+
+export const replace = (cards) => {
+  const num = cards.length
+  decks = shuffle([...decks, ...cards])
+  return [...draw(num)]
 }
 
 export const draw = function* (times = 1) {

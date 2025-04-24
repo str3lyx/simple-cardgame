@@ -175,3 +175,10 @@ main {
 #self .card {
   cursor: pointer;
 }
+
+#stop {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1001;
+}
